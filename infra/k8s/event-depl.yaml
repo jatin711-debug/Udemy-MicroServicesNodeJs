@@ -6,12 +6,25 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: events
+      app: events-bus
   template:
     metadata:
       labels:
-        app: events
+        app: events-bus
     spec:
       containers:
-        - name: events
+        - name: events-bus
           image: johnny711dock/event-bus
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-service
+spec:
+  selector:
+    app: events-bus
+  ports:
+    - name: events-bus
+      protocol: TCP
+      port: 4005
+      targetPort: 4005
